@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ query }} - Search Results - PlantPal{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Search Results</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Search Results Section -->
+<section class="container mb-5">
+    <div class="mb-4">
+        <h1 class="mb-1">Search Results</h1>
+        <p class="text-muted">{{ query }}</p>
+    </div>
+    
+    {% if results %}
+    <div class="row g-4">
+        {% for plant in results %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 plant-card bg-dark-subtle">
+                <img src="{{ plant.image_url }}" class="card-img-top" alt="{{ plant.name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ plant.name }}</h5>
+                    <p class="text-muted small fst-italic">{{ plant.scientific_name }}</p>
+                    <p class="card-text">{{ plant.description[:100] }}{% if plant.description|length > 100 %}...{% endif %}</p>
+                    
+                    <div class="mb-3">
+                        {% for category in plant.categories[:3] %}
+                        <a href="{{ url_for('category_detail', category_id=category.id) }}" class="badge rounded-pill text-bg-success text-decoration-none me-1 category-badge">{{ category.name }}</a>
+                        {% endfor %}
+                        {% if plant.categories|length > 3 %}
+                        <span class="badge rounded-pill text-bg-secondary">+{{ plant.categories|length - 3 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="me-auto">
+                            <span class="badge text-bg-{{ 'success' if plant.difficulty == 'Easy' else 'warning' if plant.difficulty == 'Moderate' else 'danger' }} me-2">
+                                {{ plant.difficulty }}
+                            </span>
+                            <span class="badge {{ 'text-bg-success' if 'Non-toxic' in plant.toxicity else 'text-bg-danger' }}">
+                                {{ 'Pet Safe' if 'Non-toxic' in plant.toxicity else 'Toxic to Pets' }}
+                            </span>
+                        </div>
+                        <a href="{{ url_for('plant_detail', plant_id=plant.id) }}" class="btn btn-sm btn-outline-success stretched-link">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card bg-dark-subtle border-0">
+        <div class="card-body text-center py-5">
+            <div class="display-4 text-muted mb-3">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>No Plants Found</h3>
+            <p class="text-muted">We couldn't find any plants matching "{{ query }}"</p>
+            <a href="{{ url_for('index') }}" class="btn btn-success mt-3">
+                <i class="fas fa-home me-2"></i> Return to Home
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Filter Section -->
+<section class="container mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-0">Refine Your Search</h2>
+            <p class="text-muted">Filter plants by specific criteria</p>
+        </div>
+    </div>
+    
+    <div class="filter-section p-4">
+        <form id="filter-form" action="{{ url_for('filter_plants') }}" method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label for="light" class="form-label">Light Conditions</label>
+                <select class="form-select" id="light" name="light">
+                    <option value="">Any Light Level</option>
+                    <option value="Low to bright indirect">Low Light</option>
+                    <option value="Medium indirect">Medium Light</option>
+                    <option value="Bright indirect">Bright Indirect</option>
+                    <option value="Bright indirect to direct">Direct Sun</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="difficulty" class="form-label">Experience Level</label>
+                <select class="form-select" id="difficulty" name="difficulty">
+                    <option value="">Any Difficulty</option>
+                    <option value="Easy">Beginner</option>
+                    <option value="Moderate">Intermediate</option>
+                    <option value="Difficult">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="toxicity" class="form-label">Pet Friendliness</label>
+                <select class="form-select" id="toxicity" name="toxicity">
+                    <option value="">Any Toxicity Level</option>
+                    <option value="Non-toxic to pets and humans">Pet Safe</option>
+                    <option value="Toxic to pets">Toxic to Pets</option>
+                </select>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    Apply Filters
+                    <span class="spinner-border spinner-border-sm loader ms-2" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

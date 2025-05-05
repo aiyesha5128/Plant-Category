@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold animate__animated animate__fadeIn">Discover & Care for Your Houseplants</h1>
+        <p class="lead animate__animated animate__fadeIn animate__delay-1s">Find information about common houseplants and learn how to help them thrive.</p>
+        <div class="mt-4 animate__animated animate__fadeIn animate__delay-2s">
+            <a href="#featured-plants" class="btn btn-success btn-lg me-2">Explore Plants</a>
+            <a href="{{ url_for('all_categories') }}" class="btn btn-outline-light btn-lg">Browse Categories</a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container mb-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 animate-on-scroll bg-dark-subtle border-0">
+                <div class="card-body text-center">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="card-title">Identify Plants</h3>
+                    <p class="card-text">Search our database of common houseplants to identify your green friends.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 animate-on-scroll bg-dark-subtle border-0">
+                <div class="card-body text-center">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="card-title">Care Instructions</h3>
+                    <p class="card-text">Get detailed care guidelines for watering, light, soil, and more.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 animate-on-scroll bg-dark-subtle border-0">
+                <div class="card-body text-center">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3 class="card-title">Find Perfect Plants</h3>
+                    <p class="card-text">Filter plants by light conditions, difficulty level, and pet friendliness.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="container mb-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-0">Popular Categories</h2>
+            <p class="text-muted">Browse plants by their characteristics</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{{ url_for('all_categories') }}" class="btn btn-outline-success">
+                View All Categories <i class="fas fa-chevron-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="row g-3">
+        {% for category in categories[:6] %}
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="{{ url_for('category_detail', category_id=category.id) }}" class="text-decoration-none">
+                <div class="card h-100 plant-card bg-dark-subtle">
+                    <div class="card-body text-center py-4">
+                        <div class="mb-2">
+                            {% if category.name == 'Low Light' %}
+                                <i class="fas fa-moon fs-3 text-info"></i>
+                            {% elif category.name == 'Bright Light' %}
+                                <i class="fas fa-sun fs-3 text-warning"></i>
+                            {% elif category.name == 'Direct Sun' %}
+                                <i class="fas fa-sun fs-3 text-danger"></i>
+                            {% elif category.name == 'Pet Friendly' %}
+                                <i class="fas fa-paw fs-3 text-primary"></i>
+                            {% elif category.name == 'Air Purifying' %}
+                                <i class="fas fa-wind fs-3 text-success"></i>
+                            {% elif category.name == 'Drought Tolerant' %}
+                                <i class="fas fa-tint-slash fs-3 text-secondary"></i>
+                            {% elif category.name == 'Humidity Loving' %}
+                                <i class="fas fa-water fs-3 text-info"></i>
+                            {% elif category.name == 'Beginner Friendly' %}
+                                <i class="fas fa-user fs-3 text-success"></i>
+                            {% elif category.name == 'Flowering' %}
+                                <i class="fas fa-spa fs-3 text-danger"></i>
+                            {% elif category.name == 'Trailing' %}
+                                <i class="fas fa-stream fs-3 text-primary"></i>
+                            {% else %}
+                                <i class="fas fa-leaf fs-3 text-success"></i>
+                            {% endif %}
+                        </div>
+                        <h6 class="card-title mb-0">{{ category.name }}</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Plants Section -->
+<section class="container mb-5" id="featured-plants">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-0">Featured Plants</h2>
+            <p class="text-muted">Discover some of our most popular houseplants</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% for plant in featured_plants %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 plant-card bg-dark-subtle">
+                <img src="{{ plant.image_url }}" class="card-img-top" alt="{{ plant.name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ plant.name }}</h5>
+                    <p class="text-muted small fst-italic">{{ plant.scientific_name }}</p>
+                    <p class="card-text">{{ plant.description[:100] }}{% if plant.description|length > 100 %}...{% endif %}</p>
+                    
+                    <div class="mb-3">
+                        {% for category in plant.categories[:3] %}
+                        <a href="{{ url_for('category_detail', category_id=category.id) }}" class="badge rounded-pill text-bg-success text-decoration-none me-1 category-badge">{{ category.name }}</a>
+                        {% endfor %}
+                        {% if plant.categories|length > 3 %}
+                        <span class="badge rounded-pill text-bg-secondary">+{{ plant.categories|length - 3 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="me-auto">
+                            <span class="badge text-bg-{{ 'success' if plant.difficulty == 'Easy' else 'warning' if plant
+.difficulty == 'Moderate' else 'danger' }} me-2">
+                                {{ plant.difficulty }}
+                            </span>
+                            <span class="badge {{ 'text-bg-success' if 'Non-toxic' in plant.toxicity else 'text-bg-danger' }}">
+                                {{ 'Pet Safe' if 'Non-toxic' in plant.toxicity else 'Toxic to Pets' }}
+                            </span>
+                        </div>
+                        <a href="{{ url_for('plant_detail', plant_id=plant.id) }}" class="btn btn-sm btn-outline-success stretched-link">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Filter Plants Section -->
+<section class="container mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-0">Find Your Perfect Plant</h2>
+            <p class="text-muted">Filter plants by your specific needs</p>
+        </div>
+    </div>
+    
+    <div class="filter-section p-4">
+        <form id="filter-form" action="{{ url_for('filter_plants') }}" method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label for="light" class="form-label">Light Conditions</label>
+                <select class="form-select" id="light" name="light">
+                    <option value="">Any Light Level</option>
+                    <option value="Low to bright indirect">Low Light</option>
+                    <option value="Medium indirect">Medium Light</option>
+                    <option value="Bright indirect">Bright Indirect</option>
+                    <option value="Bright indirect to direct">Direct Sun</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="difficulty" class="form-label">Experience Level</label>
+                <select class="form-select" id="difficulty" name="difficulty">
+                    <option value="">Any Difficulty</option>
+                    <option value="Easy">Beginner</option>
+                    <option value="Moderate">Intermediate</option>
+                    <option value="Difficult">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="toxicity" class="form-label">Pet Friendliness</label>
+                <select class="form-select" id="toxicity" name="toxicity">
+                    <option value="">Any Toxicity Level</option>
+                    <option value="Non-toxic to pets and humans">Pet Safe</option>
+                    <option value="Toxic to pets">Toxic to Pets</option>
+                </select>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    Find Plants
+                    <span class="spinner-border spinner-border-sm loader ms-2" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

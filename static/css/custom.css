@@ -1,0 +1,70 @@
+/* Additional custom styles */
+
+/* Plant card hover effect */
+.plant-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Category badge styling */
+.category-badge {
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.category-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Plant detail page image */
+.plant-detail-img {
+    border-radius: 8px;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Search box */
+.search-box {
+    border-radius: 25px;
+    padding-left: 20px;
+}
+
+.search-box:focus {
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    border-color: var(--bs-success);
+}
+
+/* Plant care icons */
+.care-icon {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url('https://images.unsplash.com/photo-1545241047-6083a3684587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+    background-position: center;
+    background-size: cover;
+    color: white;
+    padding: 5rem 0;
+    border-radius: 0;
+}
+
+/* Filter section */
+.filter-section {
+    background-color: var(--bs-dark-bg-subtle);
+    border-radius: 8px;
+}
+
+/* Loading spinner */
+.loader {
+    display: none;
+    width: 2rem;
+    height: 2rem;
+}

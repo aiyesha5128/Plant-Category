@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PlantPal - Houseplant Identification & Care Guide{% endblock %}</title>
+    
+    <!-- Bootstrap CSS (Replit-themed) -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span>PlantPal</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('all_categories') }}">Categories</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter Plants
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('filter_plants', light='Low to bright indirect') }}">Low Light Plants</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('filter_plants', difficulty='Easy') }}">Beginner Friendly</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('filter_plants', toxicity='Non-toxic to pets and humans') }}">Pet Friendly</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('filter_plants') }}">Advanced Filter</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex" id="search-form" action="{{ url_for('search') }}" method="GET">
+                    <input class="form-control me-2 search-box" type="search" name="query" placeholder="Search plants..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search"></i>
+                        <span class="spinner-border spinner-border-sm loader" role="status" aria-hidden="true"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-dark py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="text-light mb-3">PlantPal</h5>
+                    <p class="text-muted">Your guide to identifying and caring for common houseplants.</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="text-light mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}" class="text-decoration-none text-muted">Home</a></li>
+                        <li><a href="{{ url_for('all_categories') }}" class="text-decoration-none text-muted">Categories</a></li>
+                        <li><a href="{{ url_for('filter_plants') }}" class="text-decoration-none text-muted">Filter Plants</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-light mb-3">Follow Us</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="text-muted fs-5"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-muted fs-5"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" class="text-muted fs-5"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="text-center text-muted">
+                <small>&copy; 2023 PlantPal. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+    <a id="back-to-top" href="#" class="btn btn-success btn-lg position-fixed bottom-0 end-0 m-3 rounded-circle" style="display: none;">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
